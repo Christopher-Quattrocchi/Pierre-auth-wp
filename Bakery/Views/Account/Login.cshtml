@@ -1,0 +1,22 @@
+@model Bakery.ViewModels.LoginViewModel
+
+<h2>Login</h2>
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post))
+{
+    <div>
+        @Html.LabelFor(model => model.Email)
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @required = "required" })
+    </div>
+    
+    <div>
+        @Html.LabelFor(model => model.Password)
+        @Html.PasswordFor(model => model.Password, new { @class = "form-control", @required = "required" })
+    </div>
+    
+    <input type="submit" value="Login" class="btn btn-primary" />
+}
+
+<div>
+    @Html.ActionLink("Don't have an account? Register here", "Register")
+</div>
