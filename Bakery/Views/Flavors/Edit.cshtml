@@ -1,0 +1,23 @@
+@model Bakery.Models.Flavor
+
+<h2>Edit Flavor</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.FlavorId)
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @required = "required" })
+    </div>
+    <button type="submit" value="Update" class="btn btn-primary">Update</button>
+}
+
+@using (Html.BeginForm("Delete", "Flavors", new { id = Model.FlavorId }, FormMethod.Post))
+{
+    <button type="submit" value="Delete" class="btn btn-danger">Delete</button>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

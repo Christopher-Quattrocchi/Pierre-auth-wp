@@ -1,0 +1,23 @@
+@model Bakery.Models.Flavor
+
+@{
+    ViewData["Title"] = "Add Treat";
+}
+
+<h2>Add Treat to @Model.Name</h2>
+
+@using (Html.BeginForm("AddTreat", "Flavors", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.FlavorId)
+
+    <div class="form-group">
+        <label for="treatId">Select Treat:</label>
+        @Html.DropDownList("treatId", (SelectList)ViewBag.TreatId, "Choose a treat", new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Treat</button>
+}
+
+<div>
+    @Html.ActionLink("Back to Flavor Details", "Details", new { id = Model.FlavorId }, new { @class = "btn btn-default" })
+</div>

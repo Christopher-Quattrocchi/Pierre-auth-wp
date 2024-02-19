@@ -1,0 +1,22 @@
+@model Bakery.Models.Treat
+
+<h2>Edit Treat</h2>
+
+@using (Html.BeginForm("Edit", "Treats", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.TreatId)
+    
+    <p>
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </p>
+    
+    <input type="submit" value="Save" />
+}
+
+<p>
+    @Html.ActionLink("Delete This Treat", "Delete", new { id = Model.TreatId }, new { onclick = "return confirm('Are you sure?');" })
+</p>
+
+@Html.ActionLink("Back to List", "Index")

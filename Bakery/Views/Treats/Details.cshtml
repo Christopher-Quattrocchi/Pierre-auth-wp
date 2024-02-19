@@ -1,0 +1,17 @@
+@model Bakery.Models.Treat
+
+<h2>@Model.Name</h2>
+
+<h3>Flavors:</h3>
+<ul>
+    @foreach (var ft in Model.JoinEntities)
+    {
+        <li>@ft.Flavor.Name</li>
+    }
+</ul>
+
+<p>
+    @Html.ActionLink("Add Flavor", "AddFlavor", new { treatId = Model.TreatId }) | 
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TreatId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,13 +1,13 @@
 using Bakery.Models;
 using Microsoft.AspNetCore.Mvc;
-// using Microsoft.EntityFrameworkCore;
-// using Microsoft.AspNetCore.Authorization;
-// using System.Threading.Tasks;
-// using Microsoft.AspNetCore.Mvc.Rendering;
-// using System.Linq;
-using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
+
 
 namespace Bakery.Controllers
 {
@@ -18,8 +18,122 @@ namespace Bakery.Controllers
 
     public FlavorsController(BakeryContext db, UserManager<ApplicationUser> userManager)
     {
-      _userManager = userManager;
       _db = db;
+      _userManager = userManager;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+      return View(await _db.Flavors.ToListAsync());
+
+    }
+
+    public IActionResult Create()
+    {
+      return View();
+    }
+
+    public async Task<IActionResult> Create(Flavor flavor)
+    {
+      if (ModelState.IsValid)
+      {
+        _db.Flavors.Add(flavor);
+        _db.SaveChanges();
+        return RedirectToAction("Index");
+      }
+      return View(flavor);
+    }
+
+    public async Task<IActionResult> Edit(int FlavorId)
+    {
+      Flavor flavor = await _db.Flavors.FindAsync(FlavorId);
+      if (flavor == null)
+      {
+        return NotFound();
+      }
+      return View(flavor);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(Flavor flavor)
+    {
+      if (ModelState.IsValid)
+      {
+        _db.Update(flavor);
+        await _db.SaveChangesAsync();
+        return RedirectToAction("Index");
+      }
+      return View(flavor);
+    }
+
+    public async Task<IActionResult> Details(int FlavorId)
+    {
+      Flavor flavor = await _db.Flavors
+          .Include(f => f.JoinEntities)
+          .ThenInclude(fj => fj.Treat)
+          .FirstOrDefaultAsync(f => f.FlavorId == FlavorId);
+
+      if (flavor == null)
+      {
+        return NotFound();
+      }
+
+      return View(flavor);
+    }
+
+    public async Task<IActionResult> Delete(int FlavorId)
+    {
+      Flavor flavor = await _db.Flavors.FindAsync(FlavorId);
+      if (flavor != null)
+      {
+        _db.Flavors.Remove(flavor);
+        await _db.SaveChangesAsync();
+      }
+      return RedirectToAction("Index");
+    }
+
+    [Authorize]
+    public ActionResult AddTreat(int id)
+    {
+
+      Flavor flavor = _db.Flavors.FirstOrDefault(Flavor => Flavor.FlavorId == id);
+      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "TreatName");
+      return View(flavor);
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> AddTreat(int flavorId, int treatId)
+    {
+      if (treatId == 0)
+      {
+        return RedirectToAction("Details", new { id = flavorId });
+      }
+
+      var existingAssociation = await _db.FlavorTreats
+          .AnyAsync(ft => ft.TreatId == treatId && ft.FlavorId == flavorId);
+
+      if (!existingAssociation)
+      {
+        _db.FlavorTreats.Add(new FlavorTreat { TreatId = treatId, FlavorId = flavorId });
+        await _db.SaveChangesAsync();
+      }
+
+      return RedirectToAction("Details", new { id = flavorId });
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> DeleteTreat(int flavorId, int treatId)
+    {
+      FlavorTreat flavorTreat = await _db.FlavorTreats
+          .FirstOrDefaultAsync(ft => ft.FlavorId == flavorId && ft.TreatId == treatId);
+      if (flavorTreat != null)
+      {
+        _db.FlavorTreats.Remove(flavorTreat);
+        await _db.SaveChangesAsync();
+      }
+      return RedirectToAction("Index");
     }
   }
 

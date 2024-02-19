@@ -1,0 +1,15 @@
+@model Bakery.Models.Treat
+
+<h2>Add New Treat</h2>
+
+@using (Html.BeginForm("Create", "Treats", FormMethod.Post))
+{
+    <p>
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+    </p>
+    
+    <input type="submit" value="Create" />
+}
+
+@Html.ActionLink("Back to List", "Index")

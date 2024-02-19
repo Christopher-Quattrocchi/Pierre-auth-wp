@@ -1,0 +1,16 @@
+@model Bakery.Models.FlavorTreat
+
+<h2>Delete Flavor from Treat</h2>
+
+<p>Are you sure you want to remove the flavor "@Model.Flavor.Name" from "@Model.Treat.Name"?</p>
+
+@using (Html.BeginForm("DeleteFlavor", "Treats", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    
+    @Html.HiddenFor(model => model.FlavorId)
+    @Html.HiddenFor(model => model.TreatId)
+    
+    <input type="submit" value="Delete Flavor" class="btn btn-danger" />
+    @Html.ActionLink("Cancel", "Details", new { id = Model.TreatId }, new { @class = "btn btn-default" })
+}
