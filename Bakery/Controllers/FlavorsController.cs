@@ -27,12 +27,13 @@ namespace Bakery.Controllers
       return View(await _db.Flavors.ToListAsync());
 
     }
-
+    [Authorize]
     public IActionResult Create()
     {
       return View();
     }
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create(Flavor flavor)
     {
       if (ModelState.IsValid)
@@ -43,7 +44,7 @@ namespace Bakery.Controllers
       }
       return View(flavor);
     }
-
+    [Authorize]
     public async Task<IActionResult> Edit(int id)
     {
       Flavor flavor = await _db.Flavors.FindAsync(id);
@@ -55,6 +56,7 @@ namespace Bakery.Controllers
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Edit(Flavor flavor)
     {
       if (ModelState.IsValid)
@@ -65,7 +67,7 @@ namespace Bakery.Controllers
       }
       return View(flavor);
     }
-
+    [Authorize]
     public async Task<IActionResult> Details(int id)
     {
       Flavor flavor = await _db.Flavors
@@ -80,7 +82,7 @@ namespace Bakery.Controllers
 
       return View(flavor);
     }
-
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
       Flavor flavor = await _db.Flavors.FindAsync(id);
@@ -92,7 +94,7 @@ namespace Bakery.Controllers
       return RedirectToAction("Index");
     }
 
-   
+    [Authorize]
     public ActionResult AddTreat(int flavorId)
     {
 
@@ -103,6 +105,7 @@ namespace Bakery.Controllers
 
     
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> AddTreat(int flavorId, int treatId)
     {
       if (treatId == 0)
@@ -123,6 +126,7 @@ namespace Bakery.Controllers
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> DeleteTreat(int flavorId, int treatId)
     {
       FlavorTreat flavorTreat = await _db.FlavorTreats

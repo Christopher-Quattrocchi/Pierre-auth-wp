@@ -1,12 +1,32 @@
 ﻿@using Bakery.Models
+@model Bakery.ViewModels.HomeIndexViewModel
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
+  <h1 class="center-me">Welcome to Pierre's Bakery</h1>
+
+<div>
+    <h2>Flavors</h2>
+    <ul>
+        @foreach (var flavor in Model.Flavors)
+        {
+            <li>@flavor.Name</li>
+        }
+    </ul>
+
+    <h2>Treats</h2>
+    <ul>
+        @foreach (var treat in Model.Treats)
+        {
+            <li>@treat.Name</li>
+        }
+    </ul>
+</div>
+
+
 <div class="text-center">
-  <a href="/home/login">login</a>
-  <a href="/home/register">register</a>
-  <a href="/flavors/index">flavors index</a>
-  <a href="/treats/index">treats index</a>
+  <a href="/account/login">login</a>
+  <a href="/account/register">register</a>
 </div>
