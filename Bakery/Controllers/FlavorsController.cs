@@ -32,21 +32,21 @@ namespace Bakery.Controllers
     {
       return View();
     }
-
+    [HttpPost]
     public async Task<IActionResult> Create(Flavor flavor)
     {
       if (ModelState.IsValid)
       {
         _db.Flavors.Add(flavor);
-        _db.SaveChanges();
+        await _db.SaveChangesAsync();
         return RedirectToAction("Index");
       }
       return View(flavor);
     }
 
-    public async Task<IActionResult> Edit(int FlavorId)
+    public async Task<IActionResult> Edit(int id)
     {
-      Flavor flavor = await _db.Flavors.FindAsync(FlavorId);
+      Flavor flavor = await _db.Flavors.FindAsync(id);
       if (flavor == null)
       {
         return NotFound();
@@ -66,12 +66,12 @@ namespace Bakery.Controllers
       return View(flavor);
     }
 
-    public async Task<IActionResult> Details(int FlavorId)
+    public async Task<IActionResult> Details(int id)
     {
       Flavor flavor = await _db.Flavors
           .Include(f => f.JoinEntities)
           .ThenInclude(fj => fj.Treat)
-          .FirstOrDefaultAsync(f => f.FlavorId == FlavorId);
+          .FirstOrDefaultAsync(f => f.FlavorId == id);
 
       if (flavor == null)
       {
@@ -81,9 +81,9 @@ namespace Bakery.Controllers
       return View(flavor);
     }
 
-    public async Task<IActionResult> Delete(int FlavorId)
+    public async Task<IActionResult> Delete(int id)
     {
-      Flavor flavor = await _db.Flavors.FindAsync(FlavorId);
+      Flavor flavor = await _db.Flavors.FindAsync(id);
       if (flavor != null)
       {
         _db.Flavors.Remove(flavor);
@@ -92,16 +92,16 @@ namespace Bakery.Controllers
       return RedirectToAction("Index");
     }
 
-    [Authorize]
-    public ActionResult AddTreat(int id)
+   
+    public ActionResult AddTreat(int flavorId)
     {
 
-      Flavor flavor = _db.Flavors.FirstOrDefault(Flavor => Flavor.FlavorId == id);
-      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "TreatName");
+      Flavor flavor = _db.Flavors.FirstOrDefault(Flavor => Flavor.FlavorId == flavorId);
+      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Name");
       return View(flavor);
     }
 
-    [Authorize]
+    
     [HttpPost]
     public async Task<IActionResult> AddTreat(int flavorId, int treatId)
     {
@@ -122,7 +122,6 @@ namespace Bakery.Controllers
       return RedirectToAction("Details", new { id = flavorId });
     }
 
-    [Authorize]
     [HttpPost]
     public async Task<IActionResult> DeleteTreat(int flavorId, int treatId)
     {

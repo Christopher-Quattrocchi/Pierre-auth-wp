@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace Bakery.Controllers
 {
@@ -88,7 +91,18 @@ namespace Bakery.Controllers
       return RedirectToAction("Index");
     }
 
-    [Authorize]
+    public ActionResult AddFlavor(int id)
+    {
+      Treat treat = _db.Treats.FirstOrDefault(t => t.TreatId == id);
+      if (treat == null)
+      {
+        return NotFound();
+      }
+      ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Name");
+      return View(treat);
+    }
+
+
     [HttpPost]
     public async Task<IActionResult> AddFlavor(int flavorId, int treatId)
     {
@@ -109,7 +123,7 @@ namespace Bakery.Controllers
       return RedirectToAction("Details", new { id = treatId });
     }
 
-    [Authorize]
+
     [HttpPost]
     public async Task<IActionResult> DeleteFlavor(int flavorId, int treatId)
     {

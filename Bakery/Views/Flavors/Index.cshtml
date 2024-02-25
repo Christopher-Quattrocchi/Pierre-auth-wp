@@ -1,13 +1,15 @@
 @model IEnumerable<Bakery.Models.Flavor>
+@using Bakery.Models
 
 <h2>Flavors</h2>
 
 @foreach (Flavor flavor in Model)
 {
-    <p>
-      @* This throws an error if I don't use string interpolation, but I shouldn't need to?? *@
-       @Html.ActionLink($"{flavor.Name}", "Details", new { id = flavor.FlavorId })
-    </p>
+  <li>
+    @flavor.Name -
+    @Html.ActionLink("Edit", "Edit", new { id = flavor.FlavorId }) |
+    @Html.ActionLink("Details", "Details", new { id = flavor.FlavorId })
+  </li>
 }
 
 @Html.ActionLink("Add New Flavor", "Create")

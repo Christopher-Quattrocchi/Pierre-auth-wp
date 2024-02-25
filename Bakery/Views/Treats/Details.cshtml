@@ -1,4 +1,5 @@
 @model Bakery.Models.Treat
+@using Bakery.Models
 
 <h2>@Model.Name</h2>
 
@@ -11,7 +12,7 @@
 </ul>
 
 <p>
-    @Html.ActionLink("Add Flavor", "AddFlavor", new { treatId = Model.TreatId }) | 
+    @Html.ActionLink("Add Flavor", "AddFlavor", "Treats", new { id = Model.TreatId }, null) | 
     @Html.ActionLink("Edit", "Edit", new { id = Model.TreatId }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

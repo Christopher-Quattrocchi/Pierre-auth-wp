@@ -1,4 +1,5 @@
 @model Bakery.Models.FlavorTreat
+@using Bakery.Models
 
 @{
     ViewData["Title"] = "Delete Treat Confirmation";
@@ -15,8 +16,6 @@
 
 @using (Html.BeginForm("DeleteTreatConfirmed", "Flavors", FormMethod.Post))
 {
-    @Html.AntiForgeryToken()
-    
     @Html.HiddenFor(model => model.FlavorId)
     @Html.HiddenFor(model => model.TreatId)
     

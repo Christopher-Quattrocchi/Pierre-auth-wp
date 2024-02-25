@@ -1,4 +1,5 @@
 @model Bakery.Models.FlavorTreat
+@using Bakery.Models
 
 <h2>Delete Flavor from Treat</h2>
 
@@ -6,7 +7,6 @@
 
 @using (Html.BeginForm("DeleteFlavor", "Treats", FormMethod.Post))
 {
-    @Html.AntiForgeryToken()
     
     @Html.HiddenFor(model => model.FlavorId)
     @Html.HiddenFor(model => model.TreatId)

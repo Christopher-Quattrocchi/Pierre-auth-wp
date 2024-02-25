@@ -1,4 +1,5 @@
 @model Bakery.Models.Treat
+@using Bakery.Models
 
 <h2>Edit Treat</h2>
 
@@ -9,7 +10,7 @@
     <p>
         @Html.LabelFor(model => model.Name)
         @Html.EditorFor(model => model.Name)
-        @Html.ValidationMessageFor(model => model.Name)
+   
     </p>
     
     <input type="submit" value="Save" />
